@@ -10,4 +10,10 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script>
+  // 1rem = 15px
+    let html = document.documentElement;
+    window.rem = html.getBoundingClientRect().width / 25 ;
+    html.style.fontSize = window.rem + 'px';
+  </script>
 </html>
