@@ -6,7 +6,11 @@
 
 <script>
 export default {
-	
+	props: {
+		seller: {
+			type: Object
+		}
+	}
 }
 </script>
 
