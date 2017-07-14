@@ -56,6 +56,7 @@ export default {
 				margin: 2px 0 8px 0;
 				.brand{
 					display: inline-block;
+					vertical-align: top;
 					width: 2rem;
 					height: 1.2rem;
 					background-image: url("@{picUrl}@2x.png");
@@ -64,6 +65,12 @@ export default {
 					}
 					background-size: 100% 100%;
 					background-repeat: no-repeat;
+				}
+				.name{
+					margin-left: 6px;
+					font-size: 1rem;
+					line-height: 100%;
+					font-weight: bold;
 				}
 			}
 		}
