@@ -24,8 +24,6 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var app = express()
-
 var appData = require('../data.json');
 var seller = appData.seller;
 var goods = appData.goods;
