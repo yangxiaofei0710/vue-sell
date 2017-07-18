@@ -82,6 +82,8 @@ li {
 
 html, body {
     width: 100%;
+    font-weight: 200;
+    font-family: 'PingFang SC','STHeitiSc-Light','Helveitca-Light',arial,sans-serif;
 }
 
 body {

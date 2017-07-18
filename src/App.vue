@@ -44,7 +44,7 @@ export default {
 
 <style lang="less" rel="stylesheet/less">
 @import "./common/stylus/mixin.less";
-
+@import "./common/stylus/base.less";
   #app .tab{
     display: flex;
     width: 100%; 
