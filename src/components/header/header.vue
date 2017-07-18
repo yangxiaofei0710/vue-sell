@@ -22,19 +22,23 @@
 				<i class="iconfont icon-more"></i>
 			</div>
 		</div>
+		<!-- 公告栏 -->
 		<div class="bulletin-wrapper" @click='showDetail'>
-			<span class="bulletin-title"></span><span class="bulletin-text">{{ seller.bulletin }}</span>
+			<span class="bulletin-title"></span>
+			<span class="bulletin-text">{{ seller.bulletin }}</span>
 			<i class="iconfont icon-more"></i>
 		</div>
 		<div class="background">
 			<img :src="seller.avatar" width="100%" height="100%">
 		</div>
+		<!-- 浮层 -->
 		<div v-show="datailShow" class="detail">
 			<div class="detail-wrapper clearfix">
 				<div class="detail-main">
-					<p>{{ seller.bulletin }}</p>
-					<p>{{ seller.bulletin }}</p>
-					<p>{{ seller.bulletin }}</p>
+					<h1 class="name">{{ seller.name }}</h1>
+					<div class="star-wrapper">
+						<star :size='48' :score='seller.score'></star>
+					</div>
 				</div>
 			</div>
 			<div class="detail-close">
@@ -45,11 +49,15 @@
 </template>
 
 <script>
+import star from 'components/star/star'
 export default {
 	props: {
 		seller: {
 			type: Object
 		}
+	},
+	components: {
+		star
 	},
 	created () {
 		this.classMap = ["decrease" , "discount" , "special" , "invoice" , "guarantee"]
@@ -70,7 +78,6 @@ export default {
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../common/stylus/mixin.less";
 
-@picUrl: 'brand';
 .header{
 	position: relative;
 	overflow: hidden;
@@ -98,10 +105,7 @@ export default {
 					vertical-align: top;
 					width: 2rem;
 					height: 1.2rem;
-					background-image: url("@{picUrl}@2x.png");
-					@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-						background-image: url("@{picUrl}@3x.png");
-					}
+					.bg-image("../image/header/brand");
 					background-size: 100% 100%;
 					background-repeat: no-repeat;
 				}
@@ -128,34 +132,19 @@ export default {
 					background-size: 12px 12px;
 					background-repeat: no-repeat;
 					&.decrease{
-						background-image: url("decrease_1@2x.png");
-						@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-							background-image: url("decrease_1@2x.png");
-						}
+						.bg-image("../image/header/decrease_1");
 					}
 					&.discount{
-						background-image: url("discount_1@2x.png");
-						@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-							background-image: url("discount_1@2x.png");
-						}
+						.bg-image("../image/header/discount_1");
 					}
 					&.guarantee{
-						background-image: url("guarantee_1@2x.png");
-						@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-							background-image: url("guarantee_1@2x.png");
-						}
+						.bg-image("../image/header/guarantee_1");
 					}
 					&.invoice{
-						background-image: url("invoice_1@2x.png");
-						@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-							background-image: url("invoice_1@2x.png");
-						}
+						.bg-image("../image/header/invoice_1");
 					}
 					&.special{
-						background-image: url("special_1@2x.png");
-						@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-							background-image: url("special_1@2x.png");
-						}
+						.bg-image("../image/header/special_1");
 					}
 				}
 				.text{
@@ -199,10 +188,7 @@ export default {
 			margin-top: 8px;
 			width: 22px;
 			height: 12px;
-			background-image: url("bulletin@2x.png");
-			@media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3){
-				background-image: url("bulletin@3x.png");
-			}
+			.bg-image("../image/header/bulletin");
 			background-size: 100% 100%;
 			background-repeat: no-repeat;
 		}
@@ -237,9 +223,23 @@ export default {
 		background: rgba(7, 17, 27, 0.8);
 		.detail-wrapper{
 			min-height: 100%;
+			// IE6不识别min-height
+			height: 100%;
+			width: 100%;
 			.detail-main{
 				margin-top: 64px;
 				padding-bottom: 64px; 
+				.name{
+					line-height: 16px;
+					text-align: center;
+					font-size: 16px;
+					font-weight: 700;
+				}
+				.star-wrapper{
+					margin-top: 18px;
+					padding: 2px 0;
+					text-align: center;
+				}
 			}
 		}
 		.detail-close{
