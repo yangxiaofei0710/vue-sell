@@ -8,10 +8,13 @@
 		width: 100%;
 		border-top: 1px solid @color;
 		content: '';
-		transform: scaleY(0.5);
 	}
 };
-
+.border-none(){
+	&:after{
+		display: none;
+	}
+}
 .clearfix{
 	display: inline-block;
 	&:after{
