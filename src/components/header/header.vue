@@ -32,24 +32,13 @@
 			<img :src="seller.avatar" width="100%" height="100%">
 		</div>
 		<!-- 浮层 -->
-		<div v-show="datailShow" class="detail">
-			<div class="detail-wrapper clearfix">
-				<div class="detail-main">
-					<h1 class="name">{{ seller.name }}</h1>
-					<div class="star-wrapper">
-						<star :size='48' :score='seller.score'></star>
-					</div>
-				</div>
-			</div>
-			<div class="detail-close">
-				<i class="iconfont icon-close"></i>
-			</div>
-		</div>
+		<detail :datailShow="datailShow" :seller="seller" @closeDetial="hideDetial"></detail>	
 	</div>
 </template>
 
 <script>
 import star from 'components/star/star'
+import detail from "./detail"
 export default {
 	props: {
 		seller: {
@@ -57,7 +46,7 @@ export default {
 		}
 	},
 	components: {
-		star
+		detail
 	},
 	created () {
 		this.classMap = ["decrease" , "discount" , "special" , "invoice" , "guarantee"]
@@ -70,6 +59,9 @@ export default {
 	methods: {
 		showDetail () {
 			this.datailShow = true
+		},
+		hideDetial () {
+			this.datailShow = false
 		}
 	}
 }
@@ -212,45 +204,6 @@ export default {
 		z-index: -1;
 		filter: blur(10px);
 	}
-	.detail{
-		position: fixed;
-		z-index: 100;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		background: rgba(7, 17, 27, 0.8);
-		.detail-wrapper{
-			min-height: 100%;
-			// IE6不识别min-height
-			height: 100%;
-			width: 100%;
-			.detail-main{
-				margin-top: 64px;
-				padding-bottom: 64px; 
-				.name{
-					line-height: 16px;
-					text-align: center;
-					font-size: 16px;
-					font-weight: 700;
-				}
-				.star-wrapper{
-					margin-top: 18px;
-					padding: 2px 0;
-					text-align: center;
-				}
-			}
-		}
-		.detail-close{
-			position: relative;
-			width: 32px;
-			height: 32px;
-			margin: -64px auto 0 auto;
-			clear: both;
-			font-size: 32px;
-			text-align: center;
-		}
-	}
+	
 }
 </style>

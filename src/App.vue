@@ -12,7 +12,9 @@
         <router-link :to="{ path: 'seller' }" active-class='active'>商家</router-link>
       </div>
     </div>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -20,7 +22,6 @@
 import  header from '@/components/header/header'
 
 const ERR_OK = 0
-
 export default {
   components: {
     vHeader: header
@@ -32,10 +33,8 @@ export default {
   },
   created () {
     this.$http.get('/api/seller').then((res) =>  {
-      console.log(res)
       if (res.data.errno === ERR_OK) {
           this.seller = res.body.data
-          console.log(this.seller)
       }
     })
   }
