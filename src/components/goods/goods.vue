@@ -29,6 +29,9 @@
 									<div class="price">
 										<span class="now">¥{{ food.price }}</span><span class="old" v-show="food.oldPrice">¥{{ food.oldPrice }}</span>
 									</div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food" @cartAdd="cartAdd"></cartcontrol>
+                  </div>
 								</div>
 							</li>
 						</ul>
@@ -36,18 +39,19 @@
 				</ul>
 			</div>
 		</div>
-		<shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>	
+		<shopcart ref="shopCart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
 	</div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import shopcart from 'components/shopCart/shopCart'
-
+import cartcontrol from "components/cartcontrol/cartcontral"
 const ERR_OK = 0
 export default {
 	components: {
-		shopcart	
+		shopcart,
+    cartcontrol
 	},
 	props:{
 		seller: {
@@ -73,56 +77,78 @@ export default {
 				}
 			}
 			return 0
-		}
+		},
+	    selectFoods() {
+	      let foods = [];
+	      this.goods.forEach((good) => {
+	        good.foods.forEach((food) => {
+	          if(food.count) {
+	            foods.push(food);
+	          }
+	        })
+	      })
+	      return foods;
+	    }
 	},
 	created () {
 		this.classMap = ["decrease" , "discount" , "special" , "invoice" , "guarantee"]
 		this.$http.get('/api/goods').then((res) => {
 			if (res.data.errno === ERR_OK) {
-          	this.goods = res.body.data
-          	//dom结构加载结束
-            this.$nextTick(() => {
-                this._initScroll()
-                this._calculateHeight()
-            })
-      		}
+        this.goods = res.body.data
+        //dom结构加载结束
+        this.$nextTick(() => {
+          this._initScroll()
+          this._calculateHeight()
+        })
+      }
 		})
 	},
+	events: {
+	   "cart.add"(target){
+	      this._drop(target);
+	   }
+	},
 	methods:{
-		selectMenu (index,event) {
-        	if(!event._constructed){
-        		return
-        	}
-        	let foodList = this.$refs.foodwrapper.getElementsByClassName('food-list-hook')
-        	let el = foodList[index]
-        	this.foodsScroll.scrollToElement(el,300)
-        },
+		selectMenu(index,event) {
+	      if(!event._constructed){
+	        return
+	      }
+	      let foodList = this.$refs.foodwrapper.getElementsByClassName('food-list-hook')
+	      let el = foodList[index]
+	      this.foodsScroll.scrollToElement(el,300)
+	    },
+	    _drop(target) {
+	    	this.$refs.shopCart.drop(target);
+	    },
 		_initScroll() {
-            this.meunScroll = new BScroll(this.$refs.menuwrapper, {
-            	click: true
-            });
-            this.foodsScroll = new BScroll(this.$refs.foodwrapper, {
-            	//探针作用，实时监测滚动位置
-            	probeType: 3
-            });
-            this.foodsScroll.on('scroll', (pos) => {
-            	//scrollY接收变量
-            	this.scrollY = Math.abs(Math.round(pos.y))
-            })
-        },
-        _calculateHeight () {
-        	let foodList = this.$refs.foodwrapper.getElementsByClassName('food-list-hook')
-        	let height = 0
-        	//把第一个高度送入数组
-        	this.listHeight.push(height)
-        	//通过循环foodList下的dom结构，将每一个li的高度依次送入数组
-        	for (let i = 0; i < foodList.length; i++){
-        		let item = foodList[i]
-        		height += item.clientHeight
-        		this.listHeight.push(height)
-        	}
-        },
-        
+      		this.meunScroll = new BScroll(this.$refs.menuwrapper, {
+        		click: true
+      		});
+		    this.foodsScroll = new BScroll(this.$refs.foodwrapper, {
+		        click: true,
+		        //探针作用，实时监测滚动位置
+		        probeType: 3
+		    });
+		    this.foodsScroll.on('scroll', (pos) => {
+		        //scrollY接收变量
+		        this.scrollY = Math.abs(Math.round(pos.y))
+		    })
+   		},
+	    _calculateHeight () {
+	      let foodList = this.$refs.foodwrapper.getElementsByClassName('food-list-hook')
+	      let height = 0
+	      //把第一个高度送入数组
+	      this.listHeight.push(height)
+	      //通过循环foodList下的dom结构，将每一个li的高度依次送入数组
+	      for (let i = 0; i < foodList.length; i++){
+	        let item = foodList[i]
+	        height += item.clientHeight
+	        this.listHeight.push(height)
+	      }
+	    },
+	    cartAdd(el) {
+	      this.$refs.shopCart.drop(el);
+	    }
 	}
 }
 </script>
@@ -132,7 +158,7 @@ export default {
 .goods{
 	display: flex;
 	position: absolute;
-	top: 162.27px;
+	top: 173.27px;
 	bottom: 46px;
 	overflow: hidden;
 	width: 100%;
@@ -251,9 +277,14 @@ export default {
 						color: rgb(147, 153, 159);
 					}
 				}
+        .cartcontrol-wrapper{
+          position: absolute;
+          right: 0;
+          bottom: 12px;
+        }
 			}
 		}
 	}
 }
-	
+
 </style>

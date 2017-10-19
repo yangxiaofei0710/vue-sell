@@ -9,12 +9,19 @@
 					<div class="num" v-show="totalCount>0">{{totalCount}}</div>
 				</div>
 				<div class="price" :class="{ 'highlight': totalPrice > 0 }">¥{{totalPrice}}</div>
-				<div class="desc">另需配送费{{deliveryPrice}}元</div>
+				<div class="desc">另需配送费{{deliveryPrice}}圆</div>
 			</div>
 			<div class="content-right">
-				<div class="pay">¥{{minPrice}}元起送</div>
+				<div class="pay" :class="payClass">{{ payDesc }}</div>
 			</div>
 		</div>
+	<transition name="drop">
+    	<div class="ball-container">
+        	<div v-for="ball in balls" v-show="ball.show" class="ball">
+          	<div class="inner inner-hook"></div>
+        	</div>
+    	</div>
+    </transition>
 	</div>
 </template>
 
@@ -39,6 +46,24 @@ export default{
 			default: 0
 		},
 	},
+  data() {
+	  return { 
+	      balls:[
+          {
+            show:false
+          },{
+            show:false
+          },{
+            show:false
+          },{
+            show:false
+          },{
+            show:false
+          },
+        ],
+      dropBalls:[]
+    }
+  },
 	computed: {
 		totalPrice() {
 			let total = 0;
@@ -53,8 +78,52 @@ export default{
 				count += food.count;
 			});
 			return count;
-		}
-	}
+		},
+	    payDesc(){
+			    if(this.totalPrice === 0){
+	          return `¥${this.minPrice}元起送`;
+	        }else if(this.totalPrice < this.minPrice){
+			        let diff = this.minPrice - this.totalPrice;
+			        return `还差¥${diff}元起送`;
+	        }else{
+	            return "去结算";
+	        }
+	    },
+	    payClass() {
+	        if(this.totalPrice < this.minPrice){
+	          return "not-enough";
+	        }else if(this.totalPrice > this.minPrice){
+	          return "enough";
+	        }
+	    }
+	},
+  methods: {
+    drop(el) {
+      for(let i = 0; i < this.balls.length; i++){
+          let ball = this.balls[i];
+          if(!ball.show){
+              ball.show = true;
+              ball.el = el;
+              this.dropBalls.push(ball);
+              return;
+          }
+      }
+    }
+  },
+  transitions: {
+  	
+	    drop: {
+        beforeEnter(el) {
+
+        },
+        enter(el) {
+
+        },
+        afterEnter(el) {
+
+        }
+      }
+  }
 }
 </script>
 
@@ -71,7 +140,7 @@ export default{
 			background: #141d27;
 			font-size: 0;
 			.content-left {
-				flex: 1;	
+				flex: 1;
 				.logo-wrapper {
 					display: inline-block;
 					position: relative;
@@ -123,7 +192,7 @@ export default{
 					vertical-align: top;
 					margin-top: 12px;
 					line-height: 24px;
-					padding-right: 12px; 
+					padding-right: 12px;
 					box-sizing: border-box;
 					border-right: 1px solid rgba(255, 255, 255, 0.1);
 					font-size: 16px;
@@ -153,8 +222,33 @@ export default{
 					color: rgba(255, 255, 255, 0.4);
 					font-weight: 700;
 					background: #2b333b;
+          &.not-enough{
+            background: #2b333b;
+           }
+          &.enough{
+            background: #00b43c;
+            color: #ffffff;
+           }
 				}
 			}
 		}
+    .ball-container{
+      .ball{
+        position: fixed;
+        left:32px;
+        bottom: 22px;
+        z-index:200;
+        &.drop-transition{
+          transition: all 0.4s;
+          .inner{
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgb(0, 160, 220);
+            transition: all 0.4s;
+          }
+         }
+      }
+    }
 	}
 </style>
