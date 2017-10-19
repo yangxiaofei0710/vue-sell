@@ -65,8 +65,8 @@ export default {
 
 <style lang="less" rel="stylesheet/less" scoped>
 @import "../../common/stylus/mixin.less";
-	
-.fade-enter,.fade-leave-to{
+
+  .fade-enter,.fade-leave-to{
 		opacity: 0;
 		background: rgba(7, 17, 27, 0);
 	}
@@ -77,7 +77,7 @@ export default {
 	.fade-enter-active,.fade-leave-active{
 		transition: all 0.5s;
 	}
-	
+
 	.detail{
 		position: fixed;
 		z-index: 100;
@@ -93,7 +93,7 @@ export default {
 			width: 100%;
 			.detail-main{
 				margin-top: 64px;
-				padding-bottom: 64px; 
+				padding-bottom: 64px;
 				.name{
 					line-height: 16px;
 					text-align: center;
