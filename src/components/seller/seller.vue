@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<p>
-			i am seller
+			i am seller  rebase
 		</p>
 	</div>
 </template>
